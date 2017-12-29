@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="irayspacii.cdoincidentreporter.MainActivity">
+
+    <ToggleButton
+        android:id="@+id/FirstCategory"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="126dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@android:color/background_light"
+        android:textOff="@string/firstCat"
+        android:textOn="@string/firstCat" />
+
+    <ToggleButton
+        android:id="@+id/SecondCategory"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_alignTop="@+id/FirstCategory"
+        android:layout_marginLeft="72dp"
+        android:layout_toEndOf="@+id/FirstCategory"
+        android:layout_toRightOf="@+id/FirstCategory"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="ToggleButton"
+        android:textColor="@android:color/background_light"
+        android:textOff="@string/secondCat"
+        android:textOn="@string/secondCat" />
+
+    <ToggleButton
+        android:id="@+id/ThirdCategory"
+        style="?android:attr/buttonStyle"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_alignLeft="@+id/FirstCategory"
+        android:layout_alignStart="@+id/FirstCategory"
+        android:layout_below="@+id/FirstCategory"
+        android:layout_marginTop="42dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="ToggleButton"
+        android:textColor="@android:color/background_light"
+        android:textOff="@string/thirdCat"
+        android:textOn="@string/thirdCat" />
+
+    <ToggleButton
+        android:id="@+id/FourthCategory"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_alignEnd="@+id/SecondCategory"
+        android:layout_alignRight="@+id/SecondCategory"
+        android:layout_alignTop="@+id/ThirdCategory"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="ToggleButton"
+        android:textColor="@android:color/background_light"
+        android:textOff="@string/fourthCat"
+        android:textOn="@string/fourthCat" />
+
+    <Button
+        android:id="@+id/ReportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/FourthCategory"
+        android:layout_alignLeft="@+id/ThirdCategory"
+        android:layout_alignRight="@+id/FourthCategory"
+        android:layout_alignStart="@+id/ThirdCategory"
+        android:layout_below="@+id/ThirdCategory"
+        android:layout_marginTop="96dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Report"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CDO Incident Reporter</string>
+    <string name="firstCat">Fire</string>
+    <string name="secondCat">Injury</string>
+    <string name="thirdCat">Road Accident</string>
+    <string name="fourthCat">Heart Attack</string>
+</resources>
