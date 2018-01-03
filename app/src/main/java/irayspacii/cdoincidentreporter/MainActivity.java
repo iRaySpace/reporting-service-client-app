@@ -1,6 +1,7 @@
 package irayspacii.cdoincidentreporter;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -14,6 +15,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,11 +27,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.lang.annotation.Target;
+
+public class MainActivity extends AppCompatActivity implements LocationSubscriber {
+
+    private final int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     // Handler for GPS
     private LocationManager locationManager;
     private LocationListener locationListener;
+
+    // Location variable
+    private Location location = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,43 +48,17 @@ public class MainActivity extends AppCompatActivity {
         // Get the handler from service
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // Notify about GPS status
-        if(getGpsStatus())
-            Toast.makeText(this, "GPS is enabled", Toast.LENGTH_SHORT).show();
+//        // Notify about GPS status
+//        if(getGpsStatus())
+//            Toast.makeText(this, "GPS is enabled", Toast.LENGTH_SHORT).show();
+//        else
+//            Toast.makeText(this, "GPS is disabled", Toast.LENGTH_SHORT).show();
+
+        // Get the GPS location
+        if(Build.VERSION.SDK_INT >= 23)
+            getGpsLocationWrapper();
         else
-            Toast.makeText(this, "GPS is disabled", Toast.LENGTH_SHORT).show();
-
-        // Permission checker
-        if(Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        // Get the location listener
-        locationListener = new SenderLocationListener(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
-
-        // Start requesting for location
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-        // Locate button configuration
-        Button locateButton = (Button) findViewById(R.id.LocateButton);
-
-        locateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                SenderLocationListener senderListener = (SenderLocationListener) locationListener;
-
-                if(senderListener.isLocationAvailable()) {
-                    Toast.makeText(getBaseContext(), "Longitude: " + senderListener.getLongitude(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getBaseContext(), "Latitude: " + senderListener.getLatitude(), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getBaseContext(), "Location not available", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
+            getGpsLocation();
 
     }
 
@@ -118,6 +102,80 @@ public class MainActivity extends AppCompatActivity {
 
         // Send the SMS (the number is from AFREESMS PH) (don't spam lol.)
         sender.sendTextMessage("+639177140579", null, incidentType, sentPI, null);
+
+    }
+
+    private void getGpsLocation() {
+
+        // Initialize the listener for GPS
+        locationListener = new SenderLocationListener(this);
+
+        // Explicit permission for SDK 23 and above
+        if(Build.VERSION.SDK_INT >= 23) {
+
+            int hasGpsPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+
+            if(hasGpsPermission != PackageManager.PERMISSION_GRANTED)
+                return;
+
+        }
+
+        // Start requesting for location
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+    }
+
+    /**
+     * Apparently, the SDK version 23 and above needs Runtime Permission handled.
+     */
+    @TargetApi(23)
+    private void getGpsLocationWrapper() {
+
+        int hasGpsPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        // Request for runtime permission
+        if(hasGpsPermission != PackageManager.PERMISSION_GRANTED) {
+
+            // Only ask for fine location.
+            // If granted, permissions to coarse location will be also granted
+            String[] permission = { Manifest.permission.ACCESS_FINE_LOCATION };
+
+            requestPermissions(permission, REQUEST_CODE_ASK_PERMISSIONS);
+
+            return;
+
+        }
+
+        // Get the GPS location
+        getGpsLocation();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Execute getGpsLocation() if granted.
+        switch(requestCode) {
+
+            case REQUEST_CODE_ASK_PERMISSIONS:
+
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED) { getGpsLocation(); }
+                else { Toast.makeText(this, "Please allow GPS!", Toast.LENGTH_SHORT).show(); }
+
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void locationUpdate(Location location) {
+
+        Toast.makeText(getBaseContext(), "Location updated!", Toast.LENGTH_SHORT).show();
+
+        // Update location
+        this.location = location;
 
     }
 

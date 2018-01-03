@@ -1,14 +1,8 @@
 package irayspacii.cdoincidentreporter;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 /**
  * Created by ivanray on 1/2/18.
@@ -16,29 +10,19 @@ import android.widget.Toast;
 
 public class SenderLocationListener implements LocationListener {
 
-    private Location location;
+    private LocationSubscriber subscriber;
 
-    public SenderLocationListener(Location location) {
-        this.location = location;
-    }
-
-    public double getLongitude() {
-        return location.getLongitude();
-    }
-
-    public double getLatitude() {
-        return location.getLatitude();
-    }
-
-    public boolean isLocationAvailable() {
-        if(location == null)
-            return false;
-        return true;
+    /**
+     * The listener not only listens but notifies any subscriber for location change.
+     * @param subscriber
+     */
+    public SenderLocationListener(LocationSubscriber subscriber) {
+        this.subscriber = subscriber;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        this.location = location;
+        subscriber.locationUpdate(location);
     }
 
     @Override
