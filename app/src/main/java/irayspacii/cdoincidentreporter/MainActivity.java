@@ -23,8 +23,10 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.annotation.Target;
@@ -44,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Disable the report button
+        Button reportButton = (Button) findViewById(R.id.ReportButton);
+        reportButton.setEnabled(false);
 
         // Get the handler from service
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -91,6 +97,11 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
         // Notify the user
         Toast.makeText(MainActivity.this, incidentType, Toast.LENGTH_SHORT).show();
 
+        // Text Message
+        String textMessage = "lat:" + location.getLatitude() + "\n"
+                + "long:" + location.getLongitude() + "\n"
+                + "type:" + incidentType;
+
         // SMS Handler of Android
         SmsManager sender = SmsManager.getDefault();
 
@@ -101,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, sentIntent, 0);
 
         // Send the SMS (the number is from AFREESMS PH) (don't spam lol.)
-        sender.sendTextMessage("+639177140579", null, incidentType, sentPI, null);
+        sender.sendTextMessage("09177140579", null, textMessage, sentPI, null);
 
     }
 
@@ -121,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
         }
 
         // Start requesting for location
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
     }
 
@@ -172,10 +184,22 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
     @Override
     public void locationUpdate(Location location) {
 
-        Toast.makeText(getBaseContext(), "Location updated!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Position updated!", Toast.LENGTH_SHORT).show();
 
         // Update location
         this.location = location;
+
+        // Hide progress bar
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.ProgressCircle);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        // Set the progress text
+        TextView progressText = (TextView) findViewById(R.id.ProgressText);
+        progressText.setText("Your position is identified\nAccuracy: " + location.getAccuracy());
+
+        // Enable the report button
+        Button reportButton = (Button) findViewById(R.id.ReportButton);
+        reportButton.setEnabled(true);
 
     }
 
