@@ -2,34 +2,24 @@ package irayspacii.cdoincidentreporter;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.lang.annotation.Target;
 
 public class MainActivity extends AppCompatActivity implements LocationSubscriber {
 
@@ -42,23 +32,44 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
     // Location variable
     private Location location = null;
 
+    // To be used for broadcast receivers
+    private static MainActivity ins;
+
+    // Start time for getting GPS
+    long startTime;
+    long estimatedTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Disable the report button
+        // Get the category
+        Intent intent = getIntent();
+
+        // Set the main category and sub category
+        TextView category = (TextView) findViewById(R.id.MainCategoryText);
+        category.setText(intent.getStringExtra("mainCategory"));
+
+        TextView subcategory = (TextView) findViewById(R.id.SubCategoryText);
+        subcategory.setText(intent.getStringExtra("subCategory"));
+
+        // Label
+        TextView status = (TextView) findViewById(R.id.StatusText);
+        status.setText("Updating position");
+
+        // Disable report button
         Button reportButton = (Button) findViewById(R.id.ReportButton);
         reportButton.setEnabled(false);
 
         // Get the handler from service
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-//        // Notify about GPS status
-//        if(getGpsStatus())
-//            Toast.makeText(this, "GPS is enabled", Toast.LENGTH_SHORT).show();
-//        else
-//            Toast.makeText(this, "GPS is disabled", Toast.LENGTH_SHORT).show();
+        // Notify about GPS status
+        if(getGpsStatus())
+            Toast.makeText(this, "GPS is enabled", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "GPS is disabled", Toast.LENGTH_SHORT).show();
 
         // Get the GPS location
         if(Build.VERSION.SDK_INT >= 23)
@@ -66,20 +77,30 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
         else
             getGpsLocation();
 
+        ins = this;
+
+    }
+
+    public static MainActivity getInstance() {
+        return ins;
     }
 
     public void onClick(View v) {
 
-        RadioGroup incident = (RadioGroup) findViewById(R.id.IncidentRadios);
+        // RadioGroup incident = (RadioGroup) findViewById(R.id.IncidentRadios);
 
         // Get the selected incident type
-        int selectedIncidentId = incident.getCheckedRadioButtonId();
+        // int selectedIncidentId = incident.getCheckedRadioButtonId();
 
         // Get the corresponding radio button
-        RadioButton selectedIncident = (RadioButton) findViewById(selectedIncidentId);
+        // RadioButton selectedIncident = (RadioButton) findViewById(selectedIncidentId);
+
+        TextView status = (TextView) findViewById(R.id.StatusText);
+        status.setTextColor(Color.parseColor("#2196f3"));
+        status.setText("Reporting");
 
         // Send SMS about the incident
-        sendSMS(selectedIncident.getText().toString());
+        sendSMS();
 
     }
 
@@ -92,15 +113,21 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
 
     }
 
-    private void sendSMS(String incidentType) {
+    private void sendSMS() {
 
-        // Notify the user
-        Toast.makeText(MainActivity.this, incidentType, Toast.LENGTH_SHORT).show();
+        // Main Incident Category
+        String main = ((TextView) findViewById(R.id.MainCategoryText)).getText().toString();
+
+        // Sub Incident Category
+        String sub = ((TextView) findViewById(R.id.SubCategoryText)).getText().toString();
 
         // Text Message
-        String textMessage = "lat:" + location.getLatitude() + "\n"
-                + "long:" + location.getLongitude() + "\n"
-                + "type:" + incidentType;
+        String textMessage = "lat:" + location.getLatitude() + ","
+                + "long:" + location.getLongitude() + ","
+                + "mc:" + main + ","
+                + "sc:" + sub + ","
+                + "acc:" + location.getAccuracy() + ","
+                + "gps:" + estimatedTime;
 
         // SMS Handler of Android
         SmsManager sender = SmsManager.getDefault();
@@ -112,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, sentIntent, 0);
 
         // Send the SMS (the number is from AFREESMS PH) (don't spam lol.)
-        sender.sendTextMessage("09177140579", null, textMessage, sentPI, null);
+        sender.sendTextMessage("09059625022", null, textMessage, sentPI, null);
 
     }
 
@@ -131,7 +158,9 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
 
         }
 
-        // Start requesting for location
+        // Start requesting for location with timer
+        startTime = System.currentTimeMillis();
+
         // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
@@ -186,21 +215,37 @@ public class MainActivity extends AppCompatActivity implements LocationSubscribe
 
         Toast.makeText(getBaseContext(), "Position updated!", Toast.LENGTH_SHORT).show();
 
+        // Label
+        if(this.location == null) {
+
+            // Delta time from the start of GPS knowing
+            estimatedTime = System.currentTimeMillis() - startTime;
+
+            TextView status = (TextView) findViewById(R.id.StatusText);
+            status.setText("Position located");
+        }
+
         // Update location
         this.location = location;
 
         // Hide progress bar
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.ProgressCircle);
-        progressBar.setVisibility(View.INVISIBLE);
+        // ProgressBar progressBar = (ProgressBar) findViewById(R.id.ProgressCircle);
+        // progressBar.setVisibility(View.INVISIBLE);
 
         // Set the progress text
-        TextView progressText = (TextView) findViewById(R.id.ProgressText);
-        progressText.setText("Your position is identified\nAccuracy: " + location.getAccuracy());
+        // TextView progressText = (TextView) findViewById(R.id.ProgressText);
+        // progressText.setText("Your position is identified\nAccuracy: " + location.getAccuracy());
 
         // Enable the report button
         Button reportButton = (Button) findViewById(R.id.ReportButton);
         reportButton.setEnabled(true);
 
+    }
+
+    public void reportSent() {
+        TextView status = (TextView) findViewById(R.id.StatusText);
+        status.setTextColor(getResources().getColor(R.color.colorPrimary));
+        status.setText("Reported");
     }
 
 }

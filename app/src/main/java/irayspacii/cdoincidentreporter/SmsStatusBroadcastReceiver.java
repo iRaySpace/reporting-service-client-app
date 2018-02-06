@@ -25,6 +25,7 @@ public class SmsStatusBroadcastReceiver extends BroadcastReceiver {
                 break;
             case Activity.RESULT_OK:
                 Toast.makeText(context, "The report has been submitted!", Toast.LENGTH_SHORT).show();
+                MainActivity.getInstance().reportSent();
                 break;
         }
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="irayspacii.cdoincidentreporter.categories.MedicalCategory">
+
+    <Button
+        android:id="@+id/MedicalButton1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorButton1"
+        android:onClick="onClick"
+        android:text="Difficulty of Breathing" />
+
+    <Button
+        android:id="@+id/MedicalButton2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="onClick"
+        android:text="Chest Pain" />
+
+    <Button
+        android:id="@+id/MedicalButton3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorButton1"
+        android:onClick="onClick"
+        android:text="Muscle Cramps" />
+
+    <Button
+        android:id="@+id/MedicalButton4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="onClick"
+        android:text="Seizure" />
+
+    <Button
+        android:id="@+id/MedicalButton5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorButton1"
+        android:onClick="onClick"
+        android:text="Bleeding" />
+
+</LinearLayout>

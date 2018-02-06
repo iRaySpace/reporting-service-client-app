@@ -7,83 +7,78 @@
 
     <Button
         android:id="@+id/ReportButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="67dp"
         android:backgroundTint="@color/colorPrimary"
         android:onClick="onClick"
         android:text="Report"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <RadioGroup
-        android:id="@+id/IncidentRadios"
+    <TextView
+        android:id="@+id/MainCategoryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ReportButton"
+        android:layout_below="@+id/MainCategoryLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="64dp">
+        android:text="TextView"
+        android:textSize="36sp" />
 
-        <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Fire" />
-
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Injury" />
-
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Road Accident" />
-
-        <RadioButton
-            android:id="@+id/radioButton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Heartattacks" />
-    </RadioGroup>
-
-    <LinearLayout
-        android:id="@+id/LocationProgress"
+    <TextView
+        android:id="@+id/MainCategoryLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Main Category"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerInParent="false"
-        android:layout_centerVertical="false"
-        android:layout_marginTop="64dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_marginTop="67dp" />
 
-        <ProgressBar
-            android:id="@+id/ProgressCircle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="1"
-            android:indeterminate="true" />
+    <TextView
+        android:id="@+id/SubCategoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/MainCategoryText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:text="Sub Category"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/ProgressText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:layout_weight="1"
-            android:text="Getting GPS Location"
-            android:textAlignment="center" />
+    <TextView
+        android:id="@+id/SubCategoryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SubCategoryLabel"
+        android:layout_centerHorizontal="true"
+        android:text="TextView"
+        android:textSize="36sp" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/StatusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SubCategoryText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:text="Status"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/StatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/StatusLabel"
+        android:layout_centerHorizontal="true"
+        android:text="TextView"
+        android:textColor="@color/colorAccent"
+        android:textSize="36sp" />
 
 </RelativeLayout>

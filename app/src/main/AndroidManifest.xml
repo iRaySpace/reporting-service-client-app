@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
@@ -14,12 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity" />
+
         <receiver
             android:name=".SmsStatusBroadcastReceiver"
             android:enabled="true"
@@ -28,6 +25,15 @@
                 <action android:name="irayspacii.cdoincidentreporter.BroadcastReceiver" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".categories.MainCategory">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".categories.TraumaCategory" />
+        <activity android:name=".categories.MedicalCategory"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="irayspacii.cdoincidentreporter.categories.TraumaCategory">
+
+    <Button
+        android:id="@+id/TraumaButton1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorButton1"
+        android:onClick="onClick"
+        android:text="Vehicular Accident" />
+
+    <Button
+        android:id="@+id/TraumaButton2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="onClick"
+        android:text="Crime Incident" />
+
+    <Button
+        android:id="@+id/TraumaButton3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorButton1"
+        android:onClick="onClick"
+        android:text="Injury" />
+
+    <Button
+        android:id="@+id/TraumaButton4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="onClick"
+        android:text="Drowning" />
+
+    <Button
+        android:id="@+id/TraumaButton5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorButton1"
+        android:onClick="onClick"
+        android:text="Burns" />
+
+</LinearLayout>
